@@ -4,7 +4,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Aurora from './Aurora'
 import BorderGlow from './BorderGlow'
 import portraitPhoto from './assets/portrait-cutout-clean.png'
-import dragonHome from './assets/dragon-home.jpg'
 import siteLogo from './assets/site-logo.png'
 import wechatQr from './assets/wechat-qr.png'
 import profileCardCover from './assets/profile-card-cover.png'
@@ -1152,24 +1151,17 @@ export default function App() {
       <section
         className="hero poster-hero dragon-hero video-hero"
         id="home"
-        style={{ '--dragon-art': `url(${dragonHome})` }}
       >
-        {!isMobileViewport && (
-          <video
-            className="hero-video portfolio-video"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            poster={dragonHome}
-          >
-            <source src="./media/optimized/hero-video-web.mp4" type="video/mp4" />
-          </video>
-        )}
-        <div className="dragon-art dragon-art-base" aria-hidden="true" />
-        <div className="dragon-art dragon-art-breath" aria-hidden="true" />
-        <div className="dragon-art dragon-art-stars" aria-hidden="true" />
+        <video
+          className="hero-video portfolio-video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+        >
+          <source src="./media/optimized/hero-video-web.mp4" type="video/mp4" />
+        </video>
         <div className="hero-fallback" />
 
         <nav className={`nav poster-nav ${isNavFloating ? 'nav-floating' : ''}`}>

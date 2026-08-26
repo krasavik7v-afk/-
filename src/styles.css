@@ -278,7 +278,6 @@ a {
   -webkit-backdrop-filter: blur(0.6px) saturate(1.02);
 }
 
-.dragon-art,
 .hero-video,
 .hero-fallback {
   position: absolute;
@@ -293,7 +292,6 @@ a {
   height: 116%;
 }
 
-.dragon-art,
 .hero-fallback {
   width: auto;
   height: auto;
@@ -310,55 +308,6 @@ a {
   object-position: center;
   filter: saturate(0.88) contrast(1.05) brightness(0.9);
   transform: scale(1.06);
-}
-
-.video-hero .dragon-art-base {
-  z-index: -6;
-  display: none;
-}
-
-.video-hero .dragon-art-breath,
-.video-hero .dragon-art-stars {
-  display: none;
-}
-
-.dragon-art {
-  background-image: var(--dragon-art);
-  background-position: center;
-  background-size: cover;
-}
-
-.dragon-art-base {
-  z-index: -5;
-  filter: saturate(0.46) contrast(1.06) brightness(0.48);
-  transform: scale(1.01);
-}
-
-.dragon-art-breath {
-  z-index: -4;
-  background-position: center;
-  filter: blur(18px) saturate(0.72) brightness(0.48);
-  mix-blend-mode: screen;
-  opacity: 0.22;
-  transform: scale(1.09);
-  animation: star-breath 8s ease-in-out infinite;
-}
-
-.dragon-art-stars {
-  z-index: -3;
-  background:
-    radial-gradient(circle at 18% 14%, rgb(245 232 80 / 24%), transparent 9rem),
-    radial-gradient(circle at 52% 3%, rgb(245 232 80 / 18%), transparent 8rem),
-    radial-gradient(circle at 82% 18%, rgb(245 232 80 / 20%), transparent 9rem),
-    radial-gradient(circle at 70% 42%, rgb(139 212 205 / 16%), transparent 15rem),
-    var(--dragon-art);
-  background-position: center;
-  background-size: cover;
-  filter: blur(8px) saturate(0.65) brightness(0.58);
-  mix-blend-mode: soft-light;
-  opacity: 0.28;
-  transform: scale(1.04);
-  animation: star-drift 12s ease-in-out infinite alternate;
 }
 
 .hero-fallback {
@@ -4499,8 +4448,6 @@ h1 {
 
   .middle-content::before,
   .middle-content::after,
-  .dragon-art-breath,
-  .dragon-art-stars,
   .skill-glass-shell,
   .skill-glass-shell::after {
     animation-duration: 0.001ms !important;
