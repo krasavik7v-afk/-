@@ -1038,7 +1038,7 @@ export default function App() {
         .to('.opening-mark span', { yPercent: -115, duration: 0.8, stagger: 0.08, ease: 'power3.inOut' }, 0.34)
         .to('.opening-mask', { autoAlpha: 0, duration: 0.45 }, 1.28)
         .to('.hero-video', { scale: 1.06, filter: 'blur(0px) saturate(0.88) contrast(1.05) brightness(0.9)', duration: 1.5 }, 0.62)
-        .to('.nav', { autoAlpha: 1, y: 0, duration: 0.86 }, 0.86)
+        .to('.nav', { autoAlpha: 1, duration: 0.86, clearProps: 'transform' }, 0.86)
         .to('.poster-labels', { autoAlpha: 1, y: 0, duration: 0.72 }, 1.02)
         .to('.poster-title', { autoAlpha: 1, yPercent: 0, scaleX: 1.08, filter: 'blur(0px)', duration: 1.15 }, 1.08)
         .to('.poster-bottom > *', { autoAlpha: 1, y: 0, duration: 0.86, stagger: 0.14 }, 1.32)

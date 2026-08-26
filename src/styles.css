@@ -348,10 +348,12 @@ a {
 .nav-floating {
   position: fixed;
   top: 18px;
-  left: 50%;
+  left: 0;
+  right: 0;
   z-index: 9999;
   grid-template-columns: auto minmax(320px, 1fr) auto;
   width: min(980px, calc(100vw - 96px));
+  margin: 0 auto;
   padding: 11px 12px;
   border: 1px solid rgb(255 255 255 / 18%);
   border-radius: 8px;
@@ -364,7 +366,7 @@ a {
     0 0 36px rgb(92 178 210 / 8%);
   backdrop-filter: blur(26px) saturate(1.18);
   -webkit-backdrop-filter: blur(26px) saturate(1.18);
-  transform: translateX(-50%);
+  transform: none !important;
 }
 
 .brand {
@@ -4475,13 +4477,13 @@ h1 {
   .poster-nav,
   .poster-nav.nav-floating,
   .nav-floating {
-    left: 50%;
-    right: auto;
+    left: 0;
+    right: 0;
     display: grid;
     grid-template-columns: minmax(0, auto) minmax(0, 1fr) auto;
     width: min(calc(100vw - 24px), 720px);
     max-width: calc(100vw - 24px);
-    margin: 0;
+    margin: 0 auto;
     padding: 9px 10px;
     border: 1px solid rgb(255 255 255 / 16%);
     border-radius: 14px;
@@ -4494,7 +4496,7 @@ h1 {
       0 0 28px rgb(92 178 210 / 8%);
     backdrop-filter: blur(22px) saturate(1.16);
     -webkit-backdrop-filter: blur(22px) saturate(1.16);
-    transform: translate3d(-50%, 0, 0);
+    transform: none !important;
   }
 
   .poster-nav {
@@ -4508,7 +4510,7 @@ h1 {
     position: fixed;
     top: 10px;
     z-index: 9999;
-    transform: translate3d(-50%, 0, 0) !important;
+    transform: none !important;
   }
 
   .brand {
