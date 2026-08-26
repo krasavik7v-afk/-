@@ -160,16 +160,16 @@ const experiences = [
 const profileChips = ['AIGC 视觉生产', '短视频剪辑', 'TikTok 运营', '电商视觉优化']
 
 const skillBadges = [
-  { image: skillPs, name: 'Photoshop', accent: '#72d7ff', glow: '#1d6dff' },
-  { image: skillAi, name: 'Illustrator', accent: '#ffbe62', glow: '#ff7a1a' },
-  { image: skillAe, name: 'After Effects', accent: '#c6a3ff', glow: '#7a55ff' },
-  { image: skillPr, name: 'Premiere Pro', accent: '#f7a1ff', glow: '#aa63ff' },
-  { image: skillAu, name: 'Audition', accent: '#88a8ff', glow: '#3675ff' },
-  { image: skillDw, name: 'Dreamweaver', accent: '#73ffe9', glow: '#2de0d0' },
-  { image: skillC4d, name: 'Cinema 4D', accent: '#a8efff', glow: '#3aa6ff' },
-  { image: skillUnity, name: 'Unity 3D', accent: '#e4edf4', glow: '#6aaee9' },
-  { image: skill3dsMax, name: '3ds Max', accent: '#8ef3dd', glow: '#2eb8ca' },
-  { image: skillBlender, name: 'Blender', accent: '#ffb26a', glow: '#ff7d2f' },
+  { image: skillPs, name: 'Photoshop', accent: '#72d7ff', glow: '#1d6dff', size: 'compact' },
+  { image: skillAi, name: 'Illustrator', accent: '#ffbe62', glow: '#ff7a1a', size: 'compact' },
+  { image: skillAe, name: 'After Effects', accent: '#c6a3ff', glow: '#7a55ff', size: 'compact' },
+  { image: skillPr, name: 'Premiere Pro', accent: '#f7a1ff', glow: '#aa63ff', size: 'compact' },
+  { image: skillAu, name: 'Audition', accent: '#88a8ff', glow: '#3675ff', size: 'compact' },
+  { image: skillDw, name: 'Dreamweaver', accent: '#73ffe9', glow: '#2de0d0', size: 'compact' },
+  { image: skillC4d, name: 'Cinema 4D', accent: '#a8efff', glow: '#3aa6ff', size: 'wide' },
+  { image: skillUnity, name: 'Unity 3D', accent: '#e4edf4', glow: '#6aaee9', size: 'wide' },
+  { image: skill3dsMax, name: '3ds Max', accent: '#8ef3dd', glow: '#2eb8ca', size: 'wide' },
+  { image: skillBlender, name: 'Blender', accent: '#ffb26a', glow: '#ff7d2f', size: 'wide' },
 ]
 
 const glowProps = {
@@ -1232,7 +1232,7 @@ export default function App() {
               <div className="skill-track">
                 {[...skillBadges, ...skillBadges].map((skill, index) => (
                   <article
-                    className="skill-badge"
+                    className={`skill-badge skill-badge-${skill.size}`}
                     key={`${skill.name}-${index}`}
                     style={{ '--skill-accent': skill.accent, '--skill-glow': skill.glow }}
                   >

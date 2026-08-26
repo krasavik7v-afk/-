@@ -998,15 +998,22 @@ h1 {
   position: relative;
   z-index: 1;
   display: block;
-  width: 116px;
-  max-width: none;
-  height: auto;
+  width: 94px;
+  height: 80px;
+  margin: auto;
+  object-fit: contain;
+  object-position: center;
   filter:
     saturate(0.96)
     contrast(1.03)
     drop-shadow(0 12px 20px rgb(0 0 0 / 20%))
     drop-shadow(0 0 18px color-mix(in srgb, var(--skill-glow) 16%, transparent));
   pointer-events: none;
+}
+
+.skill-badge-wide .skill-icon-image {
+  width: 100px;
+  height: 86px;
 }
 
 .skill-badge small {
@@ -4689,7 +4696,13 @@ h1 {
   }
 
   .skill-icon-image {
-    width: 78px;
+    width: 62px;
+    height: 54px;
+  }
+
+  .skill-badge-wide .skill-icon-image {
+    width: 66px;
+    height: 58px;
   }
 
   .skill-badge small {
