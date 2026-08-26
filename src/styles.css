@@ -1009,6 +1009,7 @@ h1 {
     drop-shadow(0 12px 20px rgb(0 0 0 / 20%))
     drop-shadow(0 0 18px color-mix(in srgb, var(--skill-glow) 16%, transparent));
   pointer-events: none;
+  transform: translate3d(var(--skill-icon-x, 0), var(--skill-icon-y, 0), 0);
 }
 
 .skill-badge-wide .skill-icon-image {

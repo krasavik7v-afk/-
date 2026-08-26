@@ -160,16 +160,16 @@ const experiences = [
 const profileChips = ['AIGC 视觉生产', '短视频剪辑', 'TikTok 运营', '电商视觉优化']
 
 const skillBadges = [
-  { image: skillPs, name: 'Photoshop', accent: '#72d7ff', glow: '#1d6dff', size: 'compact' },
-  { image: skillAi, name: 'Illustrator', accent: '#ffbe62', glow: '#ff7a1a', size: 'compact' },
-  { image: skillAe, name: 'After Effects', accent: '#c6a3ff', glow: '#7a55ff', size: 'compact' },
-  { image: skillPr, name: 'Premiere Pro', accent: '#f7a1ff', glow: '#aa63ff', size: 'compact' },
-  { image: skillAu, name: 'Audition', accent: '#88a8ff', glow: '#3675ff', size: 'compact' },
-  { image: skillDw, name: 'Dreamweaver', accent: '#73ffe9', glow: '#2de0d0', size: 'compact' },
-  { image: skillC4d, name: 'Cinema 4D', accent: '#a8efff', glow: '#3aa6ff', size: 'wide' },
-  { image: skillUnity, name: 'Unity 3D', accent: '#e4edf4', glow: '#6aaee9', size: 'wide' },
-  { image: skill3dsMax, name: '3ds Max', accent: '#8ef3dd', glow: '#2eb8ca', size: 'wide' },
-  { image: skillBlender, name: 'Blender', accent: '#ffb26a', glow: '#ff7d2f', size: 'wide' },
+  { image: skillPs, name: 'Photoshop', accent: '#72d7ff', glow: '#1d6dff', size: 'compact', x: '-11px', y: '-5px' },
+  { image: skillAi, name: 'Illustrator', accent: '#ffbe62', glow: '#ff7a1a', size: 'compact', x: '0px', y: '-5px' },
+  { image: skillAe, name: 'After Effects', accent: '#c6a3ff', glow: '#7a55ff', size: 'compact', x: '-11px', y: '0px' },
+  { image: skillPr, name: 'Premiere Pro', accent: '#f7a1ff', glow: '#aa63ff', size: 'compact', x: '0px', y: '0px' },
+  { image: skillAu, name: 'Audition', accent: '#88a8ff', glow: '#3675ff', size: 'compact', x: '-11px', y: '0px' },
+  { image: skillDw, name: 'Dreamweaver', accent: '#73ffe9', glow: '#2de0d0', size: 'compact', x: '0px', y: '0px' },
+  { image: skillC4d, name: 'Cinema 4D', accent: '#a8efff', glow: '#3aa6ff', size: 'wide', x: '-11px', y: '0px' },
+  { image: skillUnity, name: 'Unity 3D', accent: '#e4edf4', glow: '#6aaee9', size: 'wide', x: '0px', y: '0px' },
+  { image: skill3dsMax, name: '3ds Max', accent: '#8ef3dd', glow: '#2eb8ca', size: 'wide', x: '-7px', y: '0px' },
+  { image: skillBlender, name: 'Blender', accent: '#ffb26a', glow: '#ff7d2f', size: 'wide', x: '0px', y: '0px' },
 ]
 
 const glowProps = {
@@ -1234,7 +1234,12 @@ export default function App() {
                   <article
                     className={`skill-badge skill-badge-${skill.size}`}
                     key={`${skill.name}-${index}`}
-                    style={{ '--skill-accent': skill.accent, '--skill-glow': skill.glow }}
+                    style={{
+                      '--skill-accent': skill.accent,
+                      '--skill-glow': skill.glow,
+                      '--skill-icon-x': skill.x,
+                      '--skill-icon-y': skill.y,
+                    }}
                   >
                     <div className="skill-glass-shell">
                       <img className="skill-icon-image" src={skill.image} alt={skill.name} draggable="false" />
