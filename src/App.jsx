@@ -339,6 +339,19 @@ export default function App() {
   const [isAiFilmVideoLoading, setIsAiFilmVideoLoading] = useState(false)
   const [hasAiFilmVideoError, setHasAiFilmVideoError] = useState(false)
   const [isNavFloating, setIsNavFloating] = useState(false)
+  const [isMobileViewport, setIsMobileViewport] = useState(() =>
+    typeof window !== 'undefined' ? window.matchMedia('(max-width: 760px)').matches : false
+  )
+
+  useEffect(() => {
+    const mobileQuery = window.matchMedia('(max-width: 760px)')
+    const updateMobileState = () => setIsMobileViewport(mobileQuery.matches)
+
+    updateMobileState()
+    mobileQuery.addEventListener?.('change', updateMobileState)
+
+    return () => mobileQuery.removeEventListener?.('change', updateMobileState)
+  }, [])
 
   useEffect(() => {
     if (!isEcomModalOpen) return undefined
@@ -527,6 +540,12 @@ export default function App() {
 
   useEffect(() => {
     return scheduleIdleTask(() => {
+      if (isMobileViewport) {
+        warmVideo(aiFilmVideo.src, 'metadata')
+        warmVideo(publicGoodVideo.src, 'metadata')
+        return
+      }
+
       warmVideo(aiFilmVideo.src, 'auto')
       warmVideo(publicGoodVideo.src, 'auto')
 
@@ -534,7 +553,7 @@ export default function App() {
       window.setTimeout(() => warmVideo(ecomVideos[1].src, 'metadata'), 3200)
       window.setTimeout(() => warmVideo(ecomVideos[2].src, 'metadata'), 4200)
     }, 2600)
-  }, [])
+  }, [isMobileViewport])
 
   useEffect(() => {
     const rail = skillRailRef.current
@@ -1001,9 +1020,10 @@ export default function App() {
     gsap.registerPlugin(ScrollTrigger)
 
     const ctx = gsap.context(() => {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      if (window.matchMedia('(max-width: 760px), (prefers-reduced-motion: reduce)').matches) {
         gsap.set('.opening-mask', { autoAlpha: 0 })
         gsap.set('.nav, .poster-labels, .poster-title, .poster-bottom', { autoAlpha: 1 })
+        gsap.set('.hero-video', { scale: 1.02, filter: 'blur(0px) saturate(0.9) contrast(1.04) brightness(0.9)' })
         return
       }
 
@@ -1144,7 +1164,7 @@ export default function App() {
           muted
           loop
           playsInline
-          preload="auto"
+          preload={isMobileViewport ? 'metadata' : 'auto'}
           poster={dragonHome}
         >
           <source src="./media/optimized/hero-video-web.mp4" type="video/mp4" />
@@ -1229,14 +1249,16 @@ export default function App() {
       </section>
 
       <div className="middle-content">
-        <div className="page-aurora" aria-hidden="true">
-          <Aurora
-            colorStops={['#06B6D4', '#B497CF', '#5227FF']}
-            blend={0.46}
-            amplitude={0.78}
-            speed={0.36}
-          />
-        </div>
+        {!isMobileViewport && (
+          <div className="page-aurora" aria-hidden="true">
+            <Aurora
+              colorStops={['#06B6D4', '#B497CF', '#5227FF']}
+              blend={0.46}
+              amplitude={0.78}
+              speed={0.36}
+            />
+          </div>
+        )}
 
       <section className="profile section" id="profile">
         <div className="section-inner profile-showcase">
