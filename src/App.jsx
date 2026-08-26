@@ -540,11 +540,7 @@ export default function App() {
 
   useEffect(() => {
     return scheduleIdleTask(() => {
-      if (isMobileViewport) {
-        warmVideo(aiFilmVideo.src, 'metadata')
-        warmVideo(publicGoodVideo.src, 'metadata')
-        return
-      }
+      if (isMobileViewport) return
 
       warmVideo(aiFilmVideo.src, 'auto')
       warmVideo(publicGoodVideo.src, 'auto')
@@ -1158,17 +1154,19 @@ export default function App() {
         id="home"
         style={{ '--dragon-art': `url(${dragonHome})` }}
       >
-        <video
-          className="hero-video portfolio-video"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload={isMobileViewport ? 'metadata' : 'auto'}
-          poster={dragonHome}
-        >
-          <source src="./media/optimized/hero-video-web.mp4" type="video/mp4" />
-        </video>
+        {!isMobileViewport && (
+          <video
+            className="hero-video portfolio-video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster={dragonHome}
+          >
+            <source src="./media/optimized/hero-video-web.mp4" type="video/mp4" />
+          </video>
+        )}
         <div className="dragon-art dragon-art-base" aria-hidden="true" />
         <div className="dragon-art dragon-art-breath" aria-hidden="true" />
         <div className="dragon-art dragon-art-stars" aria-hidden="true" />
@@ -1407,24 +1405,24 @@ export default function App() {
                 >
                   <div className="project-visual">
                     {isIllustrationProject && (
-                      <img className="project-cover-image" src={modalCardDragon} alt="蓝龙手绘插画封面" />
+                      <img className="project-cover-image" src={modalCardDragon} alt="蓝龙手绘插画封面" loading="lazy" decoding="async" />
                     )}
                     {isAiFilmProject && (
-                      <img className="project-cover-image ai-film-project-cover" src={aiFilmCover} alt="AI 微电影叙事封面" />
+                      <img className="project-cover-image ai-film-project-cover" src={aiFilmCover} alt="AI 微电影叙事封面" loading="lazy" decoding="async" />
                     )}
                     {isPublicGoodProject && (
-                      <img className="project-cover-image public-good-project-cover" src={publicGoodCover} alt="AI 公益传播短片封面" />
+                      <img className="project-cover-image public-good-project-cover" src={publicGoodCover} alt="AI 公益传播短片封面" loading="lazy" decoding="async" />
                     )}
                     {isEcomProject && (
-                      <img className="project-cover-image ecom-project-cover" src={ecomVideoCover} alt="电商转化视频封面" />
+                      <img className="project-cover-image ecom-project-cover" src={ecomVideoCover} alt="电商转化视频封面" loading="lazy" decoding="async" />
                     )}
                     {isPersonalIpProject && (
-                      <img className="project-cover-image personal-ip-project-cover" src={personalIpMerch} alt="Personal IP visual system cover" />
+                      <img className="project-cover-image personal-ip-project-cover" src={personalIpMerch} alt="Personal IP visual system cover" loading="lazy" decoding="async" />
                     )}
                     {isEcomVisualProject && (
                       <div className="ecom-visual-project-cover" aria-hidden="true">
-                        <img src={ecomVisualIncenseGiftBox} alt="" />
-                        <img src={ecomVisualPetLongpage} alt="" />
+                        <img src={ecomVisualIncenseGiftBox} alt="" loading="lazy" decoding="async" />
+                        <img src={ecomVisualPetLongpage} alt="" loading="lazy" decoding="async" />
                       </div>
                     )}
                     <span>{project.tag}</span>
@@ -1572,23 +1570,25 @@ export default function App() {
                   <span>视频现场生成中。。。</span>
                 </div>
               )}
-              <video
-                ref={aiFilmVideoRef}
-                src={aiFilmVideo.src}
-                controls
-                playsInline
-                preload="auto"
-                poster={aiFilmCover}
-                onLoadStart={() => setIsAiFilmVideoLoading(true)}
-                onWaiting={() => setIsAiFilmVideoLoading(true)}
-                onLoadedMetadata={() => setIsAiFilmVideoLoading(false)}
-                onLoadedData={() => setIsAiFilmVideoLoading(false)}
-                onCanPlay={() => setIsAiFilmVideoLoading(false)}
-                onError={() => {
-                  setHasAiFilmVideoError(true)
-                  setIsAiFilmVideoLoading(false)
-                }}
-              />
+              {isAiFilmModalOpen && (
+                <video
+                  ref={aiFilmVideoRef}
+                  src={aiFilmVideo.src}
+                  controls
+                  playsInline
+                  preload={isMobileViewport ? 'metadata' : 'auto'}
+                  poster={aiFilmCover}
+                  onLoadStart={() => setIsAiFilmVideoLoading(true)}
+                  onWaiting={() => setIsAiFilmVideoLoading(true)}
+                  onLoadedMetadata={() => setIsAiFilmVideoLoading(false)}
+                  onLoadedData={() => setIsAiFilmVideoLoading(false)}
+                  onCanPlay={() => setIsAiFilmVideoLoading(false)}
+                  onError={() => {
+                    setHasAiFilmVideoError(true)
+                    setIsAiFilmVideoLoading(false)
+                  }}
+                />
+              )}
               {hasAiFilmVideoError && (
                 <div className="ai-film-empty">
                   <span>等待放入小红书视频文件</span>
@@ -1647,18 +1647,20 @@ export default function App() {
                   <span>视频现场生成中。。。</span>
                 </div>
               )}
-              <video
-                ref={publicGoodVideoRef}
-                src={publicGoodVideo.src}
-                controls
-                playsInline
-                preload="auto"
-                poster={publicGoodCover}
-                onLoadStart={() => setIsPublicGoodVideoLoading(true)}
-                onWaiting={() => setIsPublicGoodVideoLoading(true)}
-                onLoadedData={() => setIsPublicGoodVideoLoading(false)}
-                onCanPlay={() => setIsPublicGoodVideoLoading(false)}
-              />
+              {isPublicGoodModalOpen && (
+                <video
+                  ref={publicGoodVideoRef}
+                  src={publicGoodVideo.src}
+                  controls
+                  playsInline
+                  preload={isMobileViewport ? 'metadata' : 'auto'}
+                  poster={publicGoodCover}
+                  onLoadStart={() => setIsPublicGoodVideoLoading(true)}
+                  onWaiting={() => setIsPublicGoodVideoLoading(true)}
+                  onLoadedData={() => setIsPublicGoodVideoLoading(false)}
+                  onCanPlay={() => setIsPublicGoodVideoLoading(false)}
+                />
+              )}
             </div>
             <div className="video-stage-caption">
               <span>{publicGoodVideo.label}</span>
@@ -1729,20 +1731,22 @@ export default function App() {
                   <span>视频现场生成中。。。</span>
                 </div>
               )}
-              <video
-                ref={ecomVideoRef}
-                key={ecomVideos[activeEcomVideoIndex].src}
-                src={ecomVideos[activeEcomVideoIndex].src}
-                controls
-                playsInline
-                preload="auto"
-                poster={ecomVideoCover}
-                onLoadStart={() => setIsEcomVideoLoading(true)}
-                onWaiting={() => setIsEcomVideoLoading(true)}
-                onLoadedMetadata={() => setIsEcomVideoLoading(false)}
-                onLoadedData={() => setIsEcomVideoLoading(false)}
-                onCanPlay={() => setIsEcomVideoLoading(false)}
-              />
+              {isEcomModalOpen && (
+                <video
+                  ref={ecomVideoRef}
+                  key={ecomVideos[activeEcomVideoIndex].src}
+                  src={ecomVideos[activeEcomVideoIndex].src}
+                  controls
+                  playsInline
+                  preload={isMobileViewport ? 'metadata' : 'auto'}
+                  poster={ecomVideoCover}
+                  onLoadStart={() => setIsEcomVideoLoading(true)}
+                  onWaiting={() => setIsEcomVideoLoading(true)}
+                  onLoadedMetadata={() => setIsEcomVideoLoading(false)}
+                  onLoadedData={() => setIsEcomVideoLoading(false)}
+                  onCanPlay={() => setIsEcomVideoLoading(false)}
+                />
+              )}
             </div>
             <div className="video-stage-caption">
               <span>{ecomVideos[activeEcomVideoIndex].label}</span>
@@ -1806,7 +1810,7 @@ export default function App() {
               >
                 {ecomVisualCategories[ecomVisualCategoryIndex].items.map((artwork) => (
                   <figure className="personal-ip-slide ecom-visual-slide" key={artwork.src}>
-                    <img src={artwork.src} alt={artwork.title} />
+                    <img src={artwork.src} alt={artwork.title} loading="lazy" decoding="async" />
                     <figcaption>
                       <span>{artwork.label}</span>
                       <strong>{artwork.title}</strong>
@@ -1864,7 +1868,7 @@ export default function App() {
               >
                 {personalIpArtworks.map((artwork) => (
                   <figure className="personal-ip-slide" key={artwork.src}>
-                    <img src={artwork.src} alt={artwork.title} />
+                    <img src={artwork.src} alt={artwork.title} loading="lazy" decoding="async" />
                     <figcaption>
                       <span>{artwork.label}</span>
                       <strong>{artwork.title}</strong>
@@ -1898,7 +1902,7 @@ export default function App() {
                   onClick={() => setPersonalIpArtworkIndex(index)}
                   aria-label={`Show ${artwork.title}`}
                 >
-                  <img src={artwork.src} alt="" />
+                  <img src={artwork.src} alt="" loading="lazy" decoding="async" />
                   <small>{String(index + 1).padStart(2, '0')}</small>
                 </button>
               ))}
@@ -1934,7 +1938,7 @@ export default function App() {
             >
               {resumeModalArtworks.map((artwork) => (
                 <figure className="resume-modal-art" key={artwork.src}>
-                  <img src={artwork.src} alt={artwork.title} />
+                  <img src={artwork.src} alt={artwork.title} loading="lazy" decoding="async" />
                   <figcaption>
                     <span>{artwork.label}</span>
                     <strong>{artwork.title}</strong>
@@ -1987,7 +1991,7 @@ export default function App() {
             >
               {resumeModalArtworks.map((artwork) => (
                 <figure className="resume-modal-art" key={artwork.src}>
-                  <img src={artwork.src} alt={artwork.title} />
+                  <img src={artwork.src} alt={artwork.title} loading="lazy" decoding="async" />
                   <figcaption>
                     <span>{artwork.label}</span>
                     <strong>{artwork.title}</strong>
