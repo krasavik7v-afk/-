@@ -322,6 +322,7 @@ const aiRealDramaVideo = {
 
 export default function App() {
   const shellRef = useRef(null)
+  const heroVideoRef = useRef(null)
   const modalTiltRef = useRef(null)
   const artworkTiltRef = useRef(null)
   const personalIpTiltRef = useRef(null)
@@ -383,7 +384,7 @@ export default function App() {
     const markReady = () => setIsEcomVideoLoading(false)
     const markLoading = () => setIsEcomVideoLoading(true)
     const checkReady = () => {
-      if (video.readyState >= 2) markReady()
+      if (video.readyState >= 1) markReady()
     }
 
     video.addEventListener('loadedmetadata', checkReady)
@@ -420,7 +421,7 @@ export default function App() {
     const markReady = () => setIsPublicGoodVideoLoading(false)
     const markLoading = () => setIsPublicGoodVideoLoading(true)
     const checkReady = () => {
-      if (video.readyState >= 2) markReady()
+      if (video.readyState >= 1) markReady()
     }
 
     video.addEventListener('loadedmetadata', checkReady)
@@ -502,7 +503,7 @@ export default function App() {
     const markReady = () => setIsAiRealDramaVideoLoading(false)
     const markLoading = () => setIsAiRealDramaVideoLoading(true)
     const checkReady = () => {
-      if (video.readyState >= 2) markReady()
+      if (video.readyState >= 1) markReady()
     }
 
     video.addEventListener('loadedmetadata', checkReady)
@@ -597,15 +598,35 @@ export default function App() {
     return scheduleIdleTask(() => {
       if (isMobileViewport) return
 
-      warmVideo(aiFilmVideo.src, 'auto')
-      warmVideo(publicGoodVideo.src, 'auto')
+      warmVideo(aiFilmVideo.src, 'metadata')
+      warmVideo(publicGoodVideo.src, 'metadata')
       warmVideo(aiRealDramaVideo.src, 'metadata')
 
-      window.setTimeout(() => warmVideo(ecomVideos[0].src, 'auto'), 1600)
+      window.setTimeout(() => warmVideo(ecomVideos[0].src, 'metadata'), 1600)
       window.setTimeout(() => warmVideo(ecomVideos[1].src, 'metadata'), 3200)
       window.setTimeout(() => warmVideo(ecomVideos[2].src, 'metadata'), 4200)
     }, 2600)
   }, [isMobileViewport])
+
+  useEffect(() => {
+    const video = heroVideoRef.current
+    if (!video || !('IntersectionObserver' in window)) return undefined
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {})
+          return
+        }
+
+        video.pause()
+      },
+      { threshold: 0.12 }
+    )
+
+    observer.observe(video)
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     const rail = skillRailRef.current
@@ -986,26 +1007,26 @@ export default function App() {
   const openEcomModal = () => {
     setActiveEcomVideoIndex(0)
     setIsEcomVideoLoading(true)
-    warmVideo(ecomVideos[0].src, 'auto')
+    warmVideo(ecomVideos[0].src, 'metadata')
     setIsEcomModalOpen(true)
   }
 
   const openPublicGoodModal = () => {
     setIsPublicGoodVideoLoading(true)
-    warmVideo(publicGoodVideo.src, 'auto')
+    warmVideo(publicGoodVideo.src, 'metadata')
     setIsPublicGoodModalOpen(true)
   }
 
   const openAiFilmModal = () => {
     setIsAiFilmVideoLoading(true)
     setHasAiFilmVideoError(false)
-    warmVideo(aiFilmVideo.src, 'auto')
+    warmVideo(aiFilmVideo.src, 'metadata')
     setIsAiFilmModalOpen(true)
   }
 
   const openAiRealDramaModal = () => {
     setIsAiRealDramaVideoLoading(true)
-    warmVideo(aiRealDramaVideo.src, 'auto')
+    warmVideo(aiRealDramaVideo.src, 'metadata')
     setIsAiRealDramaModalOpen(true)
   }
 
@@ -1036,7 +1057,7 @@ export default function App() {
 
   const selectEcomVideo = (index) => {
     if (index === activeEcomVideoIndex) return
-    warmVideo(ecomVideos[index].src, 'auto')
+    warmVideo(ecomVideos[index].src, 'metadata')
     setActiveEcomVideoIndex(index)
     setIsEcomVideoLoading(true)
   }
@@ -1125,7 +1146,7 @@ export default function App() {
       if (window.matchMedia('(max-width: 760px), (prefers-reduced-motion: reduce)').matches) {
         gsap.set('.opening-mask', { autoAlpha: 0 })
         gsap.set('.nav, .poster-labels, .poster-title, .poster-bottom', { autoAlpha: 1 })
-        gsap.set('.hero-video', { scale: 1.02, filter: 'blur(0px) saturate(0.9) contrast(1.04) brightness(0.9)' })
+        gsap.set('.hero-video', { scale: 1.02 })
         return
       }
 
@@ -1134,7 +1155,7 @@ export default function App() {
       })
       gsap.set('.poster-title', { yPercent: 34, scaleX: 0.86, filter: 'blur(10px)' })
       gsap.set('.poster-bottom > *', { y: 80, autoAlpha: 0 })
-      gsap.set('.hero-video', { scale: 1.16, filter: 'blur(7px) saturate(0.78) brightness(0.72)' })
+      gsap.set('.hero-video', { scale: 1.12 })
 
       const opening = gsap.timeline({ defaults: { ease: 'power4.out' } })
       opening
@@ -1144,7 +1165,7 @@ export default function App() {
         .to('.opening-line', { scaleX: 0, transformOrigin: 'right center', duration: 0.62, ease: 'power3.inOut' }, 0.78)
         .to('.opening-mark span', { yPercent: -115, duration: 0.8, stagger: 0.08, ease: 'power3.inOut' }, 0.34)
         .to('.opening-mask', { autoAlpha: 0, duration: 0.45 }, 1.28)
-        .to('.hero-video', { scale: 1.06, filter: 'blur(0px) saturate(0.88) contrast(1.05) brightness(0.9)', duration: 1.5 }, 0.62)
+        .to('.hero-video', { scale: 1.06, duration: 1.35 }, 0.62)
         .to('.nav', { autoAlpha: 1, duration: 0.86, clearProps: 'transform' }, 0.86)
         .to('.poster-labels', { autoAlpha: 1, y: 0, duration: 0.72 }, 1.02)
         .to('.poster-title', { autoAlpha: 1, yPercent: 0, scaleX: 1.08, filter: 'blur(0px)', duration: 1.15 }, 1.08)
@@ -1260,6 +1281,7 @@ export default function App() {
         id="home"
       >
         <video
+          ref={heroVideoRef}
           className="hero-video portfolio-video"
           autoPlay
           muted
@@ -1496,13 +1518,13 @@ export default function App() {
                                 ? handleEcomVisualProjectKeyDown
                                 : undefined
                   const warmProjectVideo = isEcomProject
-                    ? () => warmVideo(ecomVideos[0].src, 'auto')
+                    ? () => warmVideo(ecomVideos[0].src, 'metadata')
                     : isPublicGoodProject
-                      ? () => warmVideo(publicGoodVideo.src, 'auto')
+                      ? () => warmVideo(publicGoodVideo.src, 'metadata')
                       : isAiFilmProject
-                        ? () => warmVideo(aiFilmVideo.src, 'auto')
+                        ? () => warmVideo(aiFilmVideo.src, 'metadata')
                         : isAiRealDramaProject
-                          ? () => warmVideo(aiRealDramaVideo.src, 'auto')
+                          ? () => warmVideo(aiRealDramaVideo.src, 'metadata')
                           : undefined
 
                   return (
@@ -1693,7 +1715,7 @@ export default function App() {
                   src={aiFilmVideo.src}
                   controls
                   playsInline
-                  preload={isMobileViewport ? 'metadata' : 'auto'}
+                  preload="metadata"
                   poster={aiFilmCover}
                   onLoadStart={() => setIsAiFilmVideoLoading(true)}
                   onWaiting={() => setIsAiFilmVideoLoading(true)}
@@ -1770,7 +1792,7 @@ export default function App() {
                   src={aiRealDramaVideo.src}
                   controls
                   playsInline
-                  preload={isMobileViewport ? 'metadata' : 'auto'}
+                  preload="metadata"
                   poster={aiRealDramaCover}
                   onLoadStart={() => setIsAiRealDramaVideoLoading(true)}
                   onWaiting={() => setIsAiRealDramaVideoLoading(true)}
@@ -1837,7 +1859,7 @@ export default function App() {
                   src={publicGoodVideo.src}
                   controls
                   playsInline
-                  preload={isMobileViewport ? 'metadata' : 'auto'}
+                  preload="metadata"
                   poster={publicGoodCover}
                   onLoadStart={() => setIsPublicGoodVideoLoading(true)}
                   onWaiting={() => setIsPublicGoodVideoLoading(true)}
@@ -1895,8 +1917,8 @@ export default function App() {
                   onPointerDown={() => selectEcomVideo(index)}
                   onMouseDown={() => selectEcomVideo(index)}
                   onClick={() => selectEcomVideo(index)}
-                  onPointerEnter={() => warmVideo(video.src, 'auto')}
-                  onFocus={() => warmVideo(video.src, 'auto')}
+                  onPointerEnter={() => warmVideo(video.src, 'metadata')}
+                  onFocus={() => warmVideo(video.src, 'metadata')}
                 >
                   <span>{String(index + 1).padStart(2, '0')}</span>
                   <strong>{video.label}</strong>
@@ -1922,7 +1944,7 @@ export default function App() {
                   src={ecomVideos[activeEcomVideoIndex].src}
                   controls
                   playsInline
-                  preload={isMobileViewport ? 'metadata' : 'auto'}
+                  preload="metadata"
                   poster={ecomVideoCover}
                   onLoadStart={() => setIsEcomVideoLoading(true)}
                   onWaiting={() => setIsEcomVideoLoading(true)}
