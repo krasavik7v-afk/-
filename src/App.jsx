@@ -11,6 +11,7 @@ import modalCardDragon from './assets/modal-card-dragon.jpg'
 import modalCardDog from './assets/modal-card-dog.jpg'
 import ecomVideoCover from './assets/ecom-video-cover.png'
 import aiFilmCover from './assets/ai-film-cover.png'
+import aiRealDramaCover from './assets/ai-real-drama-cover.jpg'
 import publicGoodCover from './assets/public-good-cover.png'
 import personalIpJewelry from './assets/personal-ip/ip-jewelry.png'
 import personalIpShirt from './assets/personal-ip/ip-shirt.png'
@@ -65,6 +66,14 @@ const projectCategories = [
       '用于展示公益主题小广告、社会议题视觉表达与情绪化传播短片，强调创意概念、信息传达和视觉记忆点。',
     meta: 'Public Campaign / AI Spot',
     tone: 'project-b',
+  },
+  {
+    tag: 'REAL DRAMA',
+    title: 'AI 真人短剧实验',
+    description:
+      '用于展示 AI 真人影像、短剧段落、剧情节奏和情绪化表演生成实验，突出人物表演、镜头调度与短剧内容可用性。',
+    meta: 'AI Live-action / Short Drama',
+    tone: 'project-i',
   },
   {
     tag: 'PERSONAL IP',
@@ -305,6 +314,12 @@ const aiFilmVideo = {
   src: './media/optimized/ai-film-narrative-web.mp4',
 }
 
+const aiRealDramaVideo = {
+  label: 'AI Live-action Drama',
+  meta: 'Short Drama / Performance Test',
+  src: './media/optimized/ai-real-drama-experiment-web.mp4',
+}
+
 export default function App() {
   const shellRef = useRef(null)
   const modalTiltRef = useRef(null)
@@ -317,6 +332,8 @@ export default function App() {
   const publicGoodVideoRef = useRef(null)
   const aiFilmTiltRef = useRef(null)
   const aiFilmVideoRef = useRef(null)
+  const aiRealDramaTiltRef = useRef(null)
+  const aiRealDramaVideoRef = useRef(null)
   const skillRailRef = useRef(null)
   const skillDragRef = useRef({ active: false, startX: 0, scrollLeft: 0 })
   const warmedVideosRef = useRef(new Set())
@@ -337,6 +354,8 @@ export default function App() {
   const [isAiFilmModalOpen, setIsAiFilmModalOpen] = useState(false)
   const [isAiFilmVideoLoading, setIsAiFilmVideoLoading] = useState(false)
   const [hasAiFilmVideoError, setHasAiFilmVideoError] = useState(false)
+  const [isAiRealDramaModalOpen, setIsAiRealDramaModalOpen] = useState(false)
+  const [isAiRealDramaVideoLoading, setIsAiRealDramaVideoLoading] = useState(false)
   const [isNavFloating, setIsNavFloating] = useState(false)
   const [isMobileViewport, setIsMobileViewport] = useState(() =>
     typeof window !== 'undefined' ? window.matchMedia('(max-width: 760px)').matches : false
@@ -472,6 +491,43 @@ export default function App() {
   }, [isAiFilmModalOpen])
 
   useEffect(() => {
+    if (!isAiRealDramaModalOpen) return undefined
+
+    setIsAiRealDramaVideoLoading(true)
+    const video = aiRealDramaVideoRef.current
+    if (!video) return undefined
+
+    video.load()
+
+    const markReady = () => setIsAiRealDramaVideoLoading(false)
+    const markLoading = () => setIsAiRealDramaVideoLoading(true)
+    const checkReady = () => {
+      if (video.readyState >= 2) markReady()
+    }
+
+    video.addEventListener('loadedmetadata', checkReady)
+    video.addEventListener('loadeddata', markReady)
+    video.addEventListener('canplay', markReady)
+    video.addEventListener('canplaythrough', markReady)
+    video.addEventListener('playing', markReady)
+    video.addEventListener('waiting', markLoading)
+
+    const frameId = window.requestAnimationFrame(checkReady)
+    const timeoutId = window.setTimeout(checkReady, 900)
+
+    return () => {
+      window.cancelAnimationFrame(frameId)
+      window.clearTimeout(timeoutId)
+      video.removeEventListener('loadedmetadata', checkReady)
+      video.removeEventListener('loadeddata', markReady)
+      video.removeEventListener('canplay', markReady)
+      video.removeEventListener('canplaythrough', markReady)
+      video.removeEventListener('playing', markReady)
+      video.removeEventListener('waiting', markLoading)
+    }
+  }, [isAiRealDramaModalOpen])
+
+  useEffect(() => {
     if (!isPersonalIpModalOpen) return undefined
 
     const intervalId = window.setInterval(() => {
@@ -543,6 +599,7 @@ export default function App() {
 
       warmVideo(aiFilmVideo.src, 'auto')
       warmVideo(publicGoodVideo.src, 'auto')
+      warmVideo(aiRealDramaVideo.src, 'metadata')
 
       window.setTimeout(() => warmVideo(ecomVideos[0].src, 'auto'), 1600)
       window.setTimeout(() => warmVideo(ecomVideos[1].src, 'metadata'), 3200)
@@ -784,6 +841,38 @@ export default function App() {
     card.style.setProperty('--modal-shift-y', '0px')
   }
 
+  const handleAiRealDramaModalPointerMove = (event) => {
+    const card = aiRealDramaTiltRef.current
+    if (!card) return
+
+    const rect = card.getBoundingClientRect()
+    const x = event.clientX - rect.left
+    const y = event.clientY - rect.top
+    const percentX = Math.min(Math.max((x / rect.width) * 100, 0), 100)
+    const percentY = Math.min(Math.max((y / rect.height) * 100, 0), 100)
+    const rotateX = (50 - percentY) / 11
+    const rotateY = (percentX - 50) / 13
+
+    card.style.setProperty('--modal-pointer-x', `${percentX}%`)
+    card.style.setProperty('--modal-pointer-y', `${percentY}%`)
+    card.style.setProperty('--modal-rotate-x', `${rotateX}deg`)
+    card.style.setProperty('--modal-rotate-y', `${rotateY}deg`)
+    card.style.setProperty('--modal-shift-x', `${(percentX - 50) / 10}px`)
+    card.style.setProperty('--modal-shift-y', `${(percentY - 50) / 11}px`)
+  }
+
+  const handleAiRealDramaModalPointerLeave = () => {
+    const card = aiRealDramaTiltRef.current
+    if (!card) return
+
+    card.style.setProperty('--modal-pointer-x', '50%')
+    card.style.setProperty('--modal-pointer-y', '50%')
+    card.style.setProperty('--modal-rotate-x', '0deg')
+    card.style.setProperty('--modal-rotate-y', '0deg')
+    card.style.setProperty('--modal-shift-x', '0px')
+    card.style.setProperty('--modal-shift-y', '0px')
+  }
+
   const handlePersonalIpModalPointerMove = (event) => {
     const card = personalIpTiltRef.current
     if (!card) return
@@ -914,6 +1003,12 @@ export default function App() {
     setIsAiFilmModalOpen(true)
   }
 
+  const openAiRealDramaModal = () => {
+    setIsAiRealDramaVideoLoading(true)
+    warmVideo(aiRealDramaVideo.src, 'auto')
+    setIsAiRealDramaModalOpen(true)
+  }
+
   const closeEcomModal = () => {
     ecomVideoRef.current?.pause()
     setIsEcomModalOpen(false)
@@ -931,6 +1026,12 @@ export default function App() {
     setIsAiFilmModalOpen(false)
     setIsAiFilmVideoLoading(false)
     setHasAiFilmVideoError(false)
+  }
+
+  const closeAiRealDramaModal = () => {
+    aiRealDramaVideoRef.current?.pause()
+    setIsAiRealDramaModalOpen(false)
+    setIsAiRealDramaVideoLoading(false)
   }
 
   const selectEcomVideo = (index) => {
@@ -980,6 +1081,12 @@ export default function App() {
     if (event.key !== 'Enter' && event.key !== ' ') return
     event.preventDefault()
     openAiFilmModal()
+  }
+
+  const handleAiRealDramaProjectKeyDown = (event) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return
+    event.preventDefault()
+    openAiRealDramaModal()
   }
 
   useEffect(() => {
@@ -1354,9 +1461,10 @@ export default function App() {
                   const isEcomProject = project.tone === 'project-d'
                   const isPublicGoodProject = project.tone === 'project-b'
                   const isAiFilmProject = project.tone === 'project-a'
+                  const isAiRealDramaProject = project.tone === 'project-i'
                   const isPersonalIpProject = project.tone === 'project-c'
                   const isEcomVisualProject = project.tone === 'project-g'
-                  const isInteractiveProject = isIllustrationProject || isEcomProject || isPublicGoodProject || isAiFilmProject || isPersonalIpProject || isEcomVisualProject
+                  const isInteractiveProject = isIllustrationProject || isEcomProject || isPublicGoodProject || isAiFilmProject || isAiRealDramaProject || isPersonalIpProject || isEcomVisualProject
                   const openProject = isIllustrationProject
                     ? openIllustrationModal
                     : isEcomProject
@@ -1365,11 +1473,13 @@ export default function App() {
                         ? openPublicGoodModal
                         : isAiFilmProject
                           ? openAiFilmModal
-                          : isPersonalIpProject
-                            ? openPersonalIpModal
-                            : isEcomVisualProject
-                              ? openEcomVisualModal
-                              : undefined
+                          : isAiRealDramaProject
+                            ? openAiRealDramaModal
+                            : isPersonalIpProject
+                              ? openPersonalIpModal
+                              : isEcomVisualProject
+                                ? openEcomVisualModal
+                                : undefined
                   const handleProjectKeyDown = isIllustrationProject
                     ? handleIllustrationProjectKeyDown
                     : isEcomProject
@@ -1378,11 +1488,22 @@ export default function App() {
                         ? handlePublicGoodProjectKeyDown
                         : isAiFilmProject
                           ? handleAiFilmProjectKeyDown
-                          : isPersonalIpProject
-                            ? handlePersonalIpProjectKeyDown
-                            : isEcomVisualProject
-                              ? handleEcomVisualProjectKeyDown
-                              : undefined
+                          : isAiRealDramaProject
+                            ? handleAiRealDramaProjectKeyDown
+                            : isPersonalIpProject
+                              ? handlePersonalIpProjectKeyDown
+                              : isEcomVisualProject
+                                ? handleEcomVisualProjectKeyDown
+                                : undefined
+                  const warmProjectVideo = isEcomProject
+                    ? () => warmVideo(ecomVideos[0].src, 'auto')
+                    : isPublicGoodProject
+                      ? () => warmVideo(publicGoodVideo.src, 'auto')
+                      : isAiFilmProject
+                        ? () => warmVideo(aiFilmVideo.src, 'auto')
+                        : isAiRealDramaProject
+                          ? () => warmVideo(aiRealDramaVideo.src, 'auto')
+                          : undefined
 
                   return (
                 <article
@@ -1391,9 +1512,9 @@ export default function App() {
                   tabIndex={isInteractiveProject ? 0 : undefined}
                   onClick={openProject}
                   onKeyDown={handleProjectKeyDown}
-                  onPointerEnter={isEcomProject ? () => warmVideo(ecomVideos[0].src, 'auto') : isPublicGoodProject ? () => warmVideo(publicGoodVideo.src, 'auto') : isAiFilmProject ? () => warmVideo(aiFilmVideo.src, 'auto') : undefined}
-                  onFocus={isEcomProject ? () => warmVideo(ecomVideos[0].src, 'auto') : isPublicGoodProject ? () => warmVideo(publicGoodVideo.src, 'auto') : isAiFilmProject ? () => warmVideo(aiFilmVideo.src, 'auto') : undefined}
-                  aria-label={isIllustrationProject ? '打开手绘与视觉插画作品预览' : isEcomProject ? '打开电商转化视频作品预览' : isPublicGoodProject ? '打开 AI 公益传播短片预览' : isAiFilmProject ? '打开 AI 微电影叙事作品预览' : undefined}
+                  onPointerEnter={warmProjectVideo}
+                  onFocus={warmProjectVideo}
+                  aria-label={isIllustrationProject ? '打开手绘与视觉插画作品预览' : isEcomProject ? '打开电商转化视频作品预览' : isPublicGoodProject ? '打开 AI 公益传播短片预览' : isAiFilmProject ? '打开 AI 微电影叙事作品预览' : isAiRealDramaProject ? '打开 AI 真人短剧实验预览' : undefined}
                 >
                   <div className="project-visual">
                     {isIllustrationProject && (
@@ -1404,6 +1525,9 @@ export default function App() {
                     )}
                     {isPublicGoodProject && (
                       <img className="project-cover-image public-good-project-cover" src={publicGoodCover} alt="AI 公益传播短片封面" loading="lazy" decoding="async" />
+                    )}
+                    {isAiRealDramaProject && (
+                      <img className="project-cover-image ai-real-drama-project-cover" src={aiRealDramaCover} alt="AI 真人短剧实验封面" loading="lazy" decoding="async" />
                     )}
                     {isEcomProject && (
                       <img className="project-cover-image ecom-project-cover" src={ecomVideoCover} alt="电商转化视频封面" loading="lazy" decoding="async" />
@@ -1425,6 +1549,7 @@ export default function App() {
                     <span>{project.description}</span>
                     {isPublicGoodProject && <b className="project-open-hint">View public spot</b>}
                     {isAiFilmProject && <b className="project-open-hint">View AI film</b>}
+                    {isAiRealDramaProject && <b className="project-open-hint">View drama test</b>}
                     {isPersonalIpProject && <b className="project-open-hint">View IP system</b>}
                     {isEcomVisualProject && <b className="project-open-hint">View visual works</b>}
                     {isIllustrationProject && <b className="project-open-hint">查看插画作品</b>}
@@ -1591,6 +1716,73 @@ export default function App() {
             <div className="video-stage-caption">
               <span>{aiFilmVideo.label}</span>
               <strong>{aiFilmVideo.meta}</strong>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div
+        className={`resume-modal-layer ecom-video-modal-layer ai-film-modal-layer ai-real-drama-modal-layer ${isAiRealDramaModalOpen ? 'is-open' : ''}`}
+        aria-hidden={!isAiRealDramaModalOpen}
+      >
+        <button
+          className="resume-modal-backdrop"
+          type="button"
+          aria-label="Close AI live-action drama preview"
+          onClick={closeAiRealDramaModal}
+        />
+        <section
+          ref={aiRealDramaTiltRef}
+          className="resume-modal ecom-video-modal public-good-modal ai-film-modal ai-real-drama-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="ai-real-drama-modal-title"
+          onPointerMove={handleAiRealDramaModalPointerMove}
+          onPointerLeave={handleAiRealDramaModalPointerLeave}
+        >
+          <div className="resume-modal-orbit" aria-hidden="true" />
+          <button className="ecom-modal-close" type="button" aria-label="Close AI live-action drama preview" onClick={closeAiRealDramaModal}>
+            <span>Close</span>
+            <b>×</b>
+          </button>
+          <aside className="video-option-panel public-good-panel ai-film-panel">
+            <p>LIVE-ACTION TEST</p>
+            <h2 id="ai-real-drama-modal-title">AI SHORT DRAMA EXPERIMENT</h2>
+            <div className="public-good-meta">
+              <span>01</span>
+              <strong>{aiRealDramaVideo.label}</strong>
+              <small>{aiRealDramaVideo.meta}</small>
+            </div>
+          </aside>
+
+          <div className="video-stage public-good-stage ai-film-stage ai-real-drama-stage">
+            <div className="video-frame public-good-frame ai-film-frame ai-real-drama-frame">
+              {isAiRealDramaVideoLoading && (
+                <div className="video-loading">
+                  <span>视频现场生成中。。。</span>
+                  <span>视频现场生成中。。。</span>
+                  <span>视频现场生成中。。。</span>
+                </div>
+              )}
+              {isAiRealDramaModalOpen && (
+                <video
+                  ref={aiRealDramaVideoRef}
+                  src={aiRealDramaVideo.src}
+                  controls
+                  playsInline
+                  preload={isMobileViewport ? 'metadata' : 'auto'}
+                  poster={aiRealDramaCover}
+                  onLoadStart={() => setIsAiRealDramaVideoLoading(true)}
+                  onWaiting={() => setIsAiRealDramaVideoLoading(true)}
+                  onLoadedMetadata={() => setIsAiRealDramaVideoLoading(false)}
+                  onLoadedData={() => setIsAiRealDramaVideoLoading(false)}
+                  onCanPlay={() => setIsAiRealDramaVideoLoading(false)}
+                />
+              )}
+            </div>
+            <div className="video-stage-caption">
+              <span>{aiRealDramaVideo.label}</span>
+              <strong>{aiRealDramaVideo.meta}</strong>
             </div>
           </div>
         </section>

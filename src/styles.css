@@ -1856,6 +1856,42 @@ h1 {
   opacity: 0.88;
 }
 
+.ai-real-drama-project-cover {
+  object-position: 50% 34%;
+  filter: saturate(0.74) contrast(1.1) brightness(0.7);
+  transform: scale(1.02);
+  opacity: 0.82;
+}
+
+.project-i .project-visual::before {
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgb(2 5 8 / 5%) 0%, rgb(3 7 11 / 14%) 46%, rgb(5 6 7 / 68%) 100%),
+    radial-gradient(circle at 62% 24%, rgb(154 214 243 / 16%), transparent 10rem),
+    radial-gradient(circle at 18% 72%, rgb(169 162 223 / 11%), transparent 9rem),
+    linear-gradient(135deg, rgb(255 255 255 / 4%), transparent 42%);
+  backdrop-filter: saturate(0.86);
+  -webkit-backdrop-filter: saturate(0.86);
+}
+
+.project-i .project-visual::after {
+  z-index: 2;
+  border-color: rgb(190 229 247 / 18%);
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 5%), transparent 36%),
+    radial-gradient(circle at 68% 28%, rgb(154 214 243 / 10%), transparent 9rem);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 11%),
+    0 0 38px rgb(91 177 221 / 10%);
+}
+
+.project-card.is-clickable:hover .ai-real-drama-project-cover,
+.project-card.is-clickable:focus-visible .ai-real-drama-project-cover {
+  filter: saturate(0.9) contrast(1.16) brightness(0.8);
+  transform: scale(1.075) translate3d(1%, -1%, 0);
+  opacity: 0.92;
+}
+
 .ecom-project-cover {
   object-position: 50% 52%;
   filter: saturate(0.82) contrast(1.1) brightness(0.76);
@@ -3564,6 +3600,10 @@ h1 {
   z-index: 18400;
 }
 
+.ai-real-drama-modal-layer {
+  z-index: 18500;
+}
+
 .ecom-video-modal {
   grid-template-columns: minmax(260px, 0.42fr) minmax(420px, 1fr);
   width: min(1180px, calc(100vw - 96px));
@@ -3593,6 +3633,16 @@ h1 {
     radial-gradient(circle at 78% 20%, rgb(158 166 221 / 18%), transparent 26rem),
     linear-gradient(145deg, rgb(238 247 255 / 13%), rgb(20 31 48 / 20%) 42%, rgb(3 7 12 / 76%)),
     rgb(3 6 10 / 68%);
+}
+
+.ai-real-drama-modal {
+  grid-template-columns: minmax(230px, 0.34fr) minmax(360px, 0.58fr);
+  width: min(1080px, calc(100vw - 86px));
+  background:
+    radial-gradient(circle at var(--modal-pointer-x) var(--modal-pointer-y), rgb(124 193 232 / 23%), transparent 22rem),
+    radial-gradient(circle at 78% 18%, rgb(169 162 223 / 18%), transparent 24rem),
+    linear-gradient(145deg, rgb(238 247 255 / 13%), rgb(20 31 48 / 18%) 42%, rgb(3 7 12 / 76%)),
+    rgb(3 6 10 / 70%);
 }
 
 .ecom-video-modal-layer.is-open .ecom-video-modal {
@@ -4003,6 +4053,24 @@ h1 {
 
 .ai-film-frame video {
   transform: scale(1.018);
+}
+
+.ai-real-drama-stage {
+  justify-self: center;
+  width: min(480px, 100%);
+}
+
+.ai-real-drama-frame {
+  min-height: min(690px, calc(100vh - 176px));
+  aspect-ratio: 9 / 16;
+  align-self: center;
+}
+
+.ai-real-drama-frame video {
+  min-height: 0;
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
+  transform: scale(1.006);
 }
 
 .ai-film-empty {
